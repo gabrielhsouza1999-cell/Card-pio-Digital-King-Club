@@ -1,11 +1,10 @@
 const WHATSAPP_URL =
   "https://wa.me/5516994017360?text=Ol%C3%A1%2C%20gostaria%20de%20reservar%20uma%20mesa%20na%20King%20Club%20Lounge.";
 
-const menu = [
+const menuSections = [
   {
     id: "bebidas",
     title: "Bebidas",
-    wide: true,
     items: [
       { name: "Água sem gás", description: "510ml", price: "R$ 5,00" },
       { name: "Água com gás", description: "510ml", price: "R$ 5,00" },
@@ -18,6 +17,7 @@ const menu = [
       { group: "Energéticos", name: "Red Bull Sabores", description: "250ml", price: "R$ 18,00" },
       { name: "Monster Sabores", description: "473ml", price: "R$ 18,00" },
     ],
+    wide: true,
   },
   {
     id: "cervejas",
@@ -46,7 +46,6 @@ const menu = [
         name: "Caipirinha",
         description: "Base: Cachaça, Vodka ou Sakê. Sabores: Limão, Morango ou Maracujá",
         price: "R$ 30,00",
-        featured: true,
       },
     ],
   },
@@ -74,7 +73,6 @@ const menu = [
     id: "combos",
     title: "Combos",
     note: "Todos os combos acompanham 4 energéticos, gelo e copos.",
-    wide: true,
     items: [
       { name: "Combo Catuaba", description: "900ml", price: "R$ 110,00" },
       { name: "Combo Smirnoff", description: "998ml", price: "R$ 190,00" },
@@ -85,6 +83,7 @@ const menu = [
       { name: "Combo Black Label", description: "1L", price: "R$ 320,00" },
       { name: "Combo Jack Daniel's", description: "1L", price: "R$ 320,00" },
     ],
+    wide: true,
   },
   {
     id: "petiscos",
@@ -99,112 +98,74 @@ const menu = [
   },
 ];
 
-const tabs = document.querySelector("#categoryTabs");
-const root = document.querySelector("#menuRoot");
-const searchInput = document.querySelector("#searchInput");
+const menuRoot = document.querySelector("#menu-root");
 const reserveButton = document.querySelector("#reserveButton");
-const emptyState = document.querySelector("#emptyState");
+const navButtons = [...document.querySelectorAll(".category-nav button")];
 
 reserveButton.href = WHATSAPP_URL;
 
-function normalize(text) {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
-}
-
-function renderTabs() {
-  tabs.innerHTML = menu
-    .map(
-      (section) => `
-        <button class="tab" type="button" data-target="${section.id}">
-          ${section.title}
-        </button>
-      `,
-    )
-    .join("");
-}
-
-function itemMatches(item, query) {
-  if (!query) return true;
-  const searchable = normalize(`${item.name} ${item.description || ""} ${item.group || ""}`);
-  return searchable.includes(query);
-}
-
-function renderMenu(filter = "") {
-  const query = normalize(filter.trim());
-  let visibleCount = 0;
-
-  root.innerHTML = menu
+function renderMenu() {
+  const sectionsMarkup = menuSections
     .map((section) => {
-      const items = section.items.filter((item) => itemMatches(item, query));
-      if (!items.length) return "";
-
-      visibleCount += items.length;
+      const note = section.note ? `<p class="section-note">${section.note}</p>` : "";
       let currentGroup = "";
-      const cards = items
+      const cards = section.items
         .map((item) => {
           const group =
             item.group && item.group !== currentGroup
-              ? `<div class="group-label">${item.group}</div>`
+              ? `<div class="item-group">${item.group}</div>`
               : "";
           if (item.group) currentGroup = item.group;
 
           return `
             ${group}
-            <article class="item ${item.featured ? "featured" : ""}">
+            <article class="menu-card">
               <div>
-                <h3>${item.name}</h3>
-                ${item.description ? `<p>${item.description}</p>` : ""}
+                <h3 class="item-name">${item.name}</h3>
+                ${item.description ? `<p class="item-desc">${item.description}</p>` : ""}
               </div>
-              <strong class="price">${item.price}</strong>
+              <strong class="item-price">${item.price}</strong>
             </article>
           `;
         })
         .join("");
 
       return `
-        <section class="section ${section.wide ? "wide" : ""}" id="${section.id}">
-          <div class="section-head">
-            <h2 class="section-title">${section.title}</h2>
-            <span class="section-meta">${items.length} itens</span>
+        <section class="menu-section" id="${section.id}" data-wide="${section.wide ? "true" : "false"}">
+          <div class="section-heading">
+            <h2>${section.title}</h2>
+            <span class="section-count">${section.items.length} itens</span>
           </div>
-          ${section.note ? `<p class="section-note">${section.note}</p>` : ""}
-          <div class="item-list">${cards}</div>
+          ${note}
+          <div class="items">${cards}</div>
         </section>
       `;
     })
     .join("");
 
-  emptyState.hidden = visibleCount > 0;
+  menuRoot.innerHTML = sectionsMarkup;
 }
 
-function setActive(targetId) {
-  document.querySelectorAll(".tab").forEach((button) => {
+function scrollToSection(targetId) {
+  const target = document.getElementById(targetId);
+  if (!target) return;
+  target.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function setActiveNav(targetId) {
+  navButtons.forEach((button) => {
     button.classList.toggle("is-active", button.dataset.target === targetId);
   });
 }
 
-renderTabs();
 renderMenu();
-setActive(menu[0].id);
 
-tabs.addEventListener("click", (event) => {
-  const button = event.target.closest(".tab");
-  if (!button) return;
-  const section = document.getElementById(button.dataset.target);
-  if (!section) return;
-  searchInput.value = "";
-  renderMenu();
-  requestAnimationFrame(() => {
-    document.getElementById(button.dataset.target)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    setActive(button.dataset.target);
+navButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const targetId = button.dataset.target;
+    setActiveNav(targetId);
+    scrollToSection(targetId);
   });
-});
-
-searchInput.addEventListener("input", (event) => {
-  renderMenu(event.target.value);
 });
 
 const observer = new IntersectionObserver(
@@ -212,12 +173,16 @@ const observer = new IntersectionObserver(
     const visible = entries
       .filter((entry) => entry.isIntersecting)
       .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-    if (visible) setActive(visible.target.id);
+
+    if (visible) setActiveNav(visible.target.id);
   },
-  { rootMargin: "-42% 0px -48% 0px", threshold: [0.1, 0.25, 0.5] },
+  {
+    rootMargin: "-42% 0px -48% 0px",
+    threshold: [0.08, 0.2, 0.4],
+  },
 );
 
-menu.forEach((section) => {
-  const target = document.getElementById(section.id);
-  if (target) observer.observe(target);
+menuSections.forEach((section) => {
+  const element = document.getElementById(section.id);
+  if (element) observer.observe(element);
 });
