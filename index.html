@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Menu digital premium da King Club Lounge. Bebidas, cervejas, baldes, caipirinhas, copões, doses, combos e petiscos."
+    />
+    <meta name="theme-color" content="#0d0d0d" />
+    <title>King Club Lounge | Menu Digital</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand-row">
+        <img src="./assets/king-logo.png" alt="King Club Lounge" class="logo" />
+        <div class="brand-copy">
+          <span>King Club Lounge</span>
+          <h1>Menu Digital</h1>
+          <p>Escolha seu pedido e solicite ao atendimento</p>
+        </div>
+      </div>
+
+      <div class="tools">
+        <label class="search-box">
+          <span>Buscar</span>
+          <input id="searchInput" type="search" placeholder="Digite whisky, combo, água..." autocomplete="off" />
+        </label>
+      </div>
+
+      <nav class="tabs" id="categoryTabs" aria-label="Navegação por categoria"></nav>
+    </header>
+
+    <main class="content">
+      <section class="hero-card">
+        <p class="hero-kicker">Cardápio fixo da casa</p>
+        <h2>Escolha com facilidade e peça direto ao atendimento.</h2>
+        <p>As categorias e a busca ajudam você a encontrar bebidas, combos e petiscos com rapidez.</p>
+      </section>
+
+      <div id="menuRoot" class="sections"></div>
+      <p id="emptyState" class="empty-state" hidden>Nenhum item encontrado.</p>
+    </main>
+
+    <a id="reserveButton" class="reserve-button" href="#" target="_blank" rel="noopener">Reservar Mesa</a>
+
+    <footer class="footer">
+      <img src="./assets/king-logo.png" alt="" class="footer-logo" />
+      <h2>King Club Lounge</h2>
+      <p>Rua Episcopal, 1423 - São Carlos/SP</p>
+      <p>
+        Instagram:
+        <a href="https://www.instagram.com/king_club_lounge/" target="_blank" rel="noopener">
+          @king_club_lounge
+        </a>
+      </p>
+      <a
+        class="instagram-link"
+        href="https://www.instagram.com/king_club_lounge/"
+        target="_blank"
+        rel="noopener"
+      >
+        Seguir no Instagram
+      </a>
+    </footer>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
