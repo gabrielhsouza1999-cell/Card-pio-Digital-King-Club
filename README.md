@@ -1,24 +1,17 @@
-# King Club Lounge - Menu Digital
+# King Club Lounge - Menu Digital Premium
 
-Página estática responsiva pronta para deploy na Vercel.
-
-## Arquivos principais
-
-- `index.html`: estrutura da página.
-- `styles.css`: identidade visual e responsividade.
-- `script.js`: produtos, preços, navegação e link de reserva.
-- `assets/king-logo.png`: logo otimizado para web.
+Segunda opção de cardápio digital, com visual mais profissional, busca rápida e layout mobile first.
 
 ## Alterar WhatsApp
 
-No topo do arquivo `script.js`, substitua o valor de `WHATSAPP_URL` pelo link oficial da King Club Lounge.
+No topo de `script.js`, troque `WHATSAPP_URL` pelo link oficial.
 
-Exemplo:
+## Endereço
 
-```js
-const WHATSAPP_URL = "https://wa.me/5516999999999?text=Ol%C3%A1%2C%20gostaria%20de%20reservar%20uma%20mesa.";
-```
+Esta versão usa:
 
-## Deploy na Vercel
+Rua Episcopal, 1423 - São Carlos/SP
 
-Envie esta pasta como projeto estático. Não há backend, banco de dados ou etapa de build.
+## Deploy
+
+Suba esta pasta na Vercel como site estático. Não há backend, banco de dados ou etapa de build.
